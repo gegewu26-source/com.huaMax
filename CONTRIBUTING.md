@@ -53,6 +53,7 @@ Be respectful and constructive. Issues and pull requests that are abusive, off-t
 
 - **Language**: Use Kotlin.
 - **UI**: Jetpack Compose + Material 3.
+- **State management**: Every screen has a dedicated `ViewModel`. Keep UI code in the screen file and all logic and state in the `ViewModel`.
 
 ---
 
