@@ -171,7 +171,7 @@ Contributions are welcome! Please read [`CONTRIBUTING.md`](CONTRIBUTING.md) for 
 
 ## **License**
 
-Distributed under the `MIT License`. See [LICENSE](LICENSE) for more information.
+Distributed under the `MIT License`. See [`LICENSE`](LICENSE) for more information.
 
 ---
 
