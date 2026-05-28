@@ -59,7 +59,6 @@ private object DrawerDimensions {
     val DRAWER_PADDING = 16.dp
     val ITEM_PADDING = 12.dp
     val ITEM_CORNER_RADIUS = 12.dp
-    val BADGE_SIZE = 8.dp
 }
 
 @Composable
@@ -68,7 +67,6 @@ fun DrawerContent(
     onCloseDrawer: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    val comingSoon = stringResource(R.string.coming_soon)
 
     ModalDrawerSheet(
         drawerContainerColor = MaterialTheme.colorScheme.surface,
