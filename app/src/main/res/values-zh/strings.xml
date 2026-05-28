@@ -147,4 +147,9 @@
     <string name="about_description">XposedFakeLocation 是一款用于测试或娱乐目的的位置模拟应用。\n\n请负责任地使用它，并确保在使用位置服务时遵守所有适用的当地法规。\n\n你需要对本应用的使用行为完全负责。</string>
     <string name="about_version_label">版本：</string>
     <string name="about_developer_label">开发和维护者：</string>
+    <string name="about_contributors_label">贡献者：</string>
+    <string name="about_contributors_loading">正在加载贡献者…</string>
+    <string name="about_contributors_error">无法加载贡献者。</string>
+    <string name="about_contributors_empty">未找到贡献者。</string>
+    <string name="about_contributors_retry">重试</string>
 </resources>

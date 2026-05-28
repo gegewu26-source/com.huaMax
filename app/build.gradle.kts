@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.gson)
     implementation(libs.hiddenapibypass)
+    implementation(libs.coil.compose)
     
     // DataStore
     implementation(libs.androidx.datastore.preferences)

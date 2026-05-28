@@ -147,4 +147,9 @@
     <string name="about_description">XposedFakeLocation is an app designed to allow users to mock their location for testing or entertainment purposes.\n\nUse it responsibly, and make sure to comply with all applicable local regulations when using location services.\n\nYou are fully responsible for the use of this app.</string>
     <string name="about_version_label">Version:</string>
     <string name="about_developer_label">Developed and maintained by:</string>
+    <string name="about_contributors_label">Contributors:</string>
+    <string name="about_contributors_loading">Loading contributors…</string>
+    <string name="about_contributors_error">Couldn\'t load contributors.</string>
+    <string name="about_contributors_empty">No contributors found.</string>
+    <string name="about_contributors_retry">Retry</string>
 </resources>
