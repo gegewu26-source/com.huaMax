@@ -35,6 +35,9 @@ jobs:
           mkdir -p "$HOME/.android"
           echo "$DEBUG_KEYSTORE_BASE64" | base64 -d > "$HOME/.android/debug.keystore"
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Build debug APK
         run: ./gradlew --no-daemon assembleDebug -PappVersionName="${{ github.event.release.tag_name }}"
 
