@@ -41,3 +41,5 @@ app/google-services.json
 .cursor/
 .claude/
 build-install.bat
+
+/.vscode
