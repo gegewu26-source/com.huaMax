@@ -33,65 +33,63 @@
 
 ## **Features**
 
-- **Global Location Spoofing**: Override your device's location data system-wide (Unstable for now).
-- **Per-App Location Control**: Apply location spoofing to specific applications.
-- **Custom Coordinates**: Set precise latitude and longitude.
-- **Altitude and Accuracy Settings**: Customize altitude, accuracy and other custom sensor values.
-- **Randomization**: Add random offsets within a specified radius for enhanced privacy.
-- **In-App Target Selection**: Choose which apps should receive spoofed locations directly inside XposedFakeLocation.
-- **User-Friendly Interface**: Modern Material Design 3 UI built with Jetpack Compose.
-- **Intuitive Navigation**: Easy access to maps, favorite locations, and settings.
-- **Community Integration**: Direct links to Telegram, Discord, and GitHub communities.
-- **Headless Mode (External Intent Control)**: Optional, off by default — once enabled in Settings, you can start/stop spoofing and set the active fake location from another app or `adb shell` via broadcast intents, no need to open the UI. See [`docs/EXTERNAL_CONTROL.md`](docs/EXTERNAL_CONTROL.md).
+- **Global or Per-App Location Spoofing**: Override your device's location data system-wide or on a per-app basis.
+- **Custom Coordinates**: Set precise GPS latitude and longitude coordinates.
+- **Fine-Tuned spoofing settings**: Customize other custom sensor values such as speed, speed accuracy, vertical accuracy, mean sea level, mean sea level accuracy, GPS noise, etc.
+- **Randomization**: Set a radius for location randomization to mimic real-world movement patterns.
+- **Intuitive UI Navigation**: Easy access to maps, favorite locations, and settings.
+- **Spoof per-app templates**: Concurrently spoof multiple apps with different locations and settings at the same time using templates.
+- **Community Integration**: Direct links to Telegram, Discord, and GitHub communities for support and updates.
+- **Headless Mode (off by default)**: Once enabled in Settings, you can start/stop spoofing and set the active fake location from another app or `adb shell` via broadcast intents, no need to open the UI. See [`docs/EXTERNAL_CONTROL.md`](docs/EXTERNAL_CONTROL.md) for more details.
 
 ---
 
 ## **Prerequisites**
 
-- **Rooted Android Device**: The app requires root access to function properly. That being said, you can try working with Xposed virtual environement on non rooted device.
-- **LSPosed**: Install the Xposed Framework compatible with your Android version.
-  - [LSPosed](https://github.com/LSPosed/LSPosed)
+- **Rooted Android Device**: The app requires root access to function properly.
+- **Xposed Framework**: Install the `Xposed Framework` compatible with your Android version. It is recommended to use [LSPosed](https://github.com/LSPosed/LSPosed) as it is the most popular `Xposed Framework` manager app.
 
 ---
 
 ## **Installation**
 
-You can always install the latest stable version from the releases page. If you want to build by yourself:
+You can always install the latest stable version of `XposedFakeLocation` from the [releases](https://github.com/noobexon1/XposedFakeLocation/releases) page. 
+
+If you want to build by yourself:
 
 1. **Clone or Download the Repository**
 
-   ```bash
+   ```shell
    git clone https://github.com/noobexon1/XposedFakeLocation.git
    ```
 
 2. **Build the Application**
 
-   - Open the project in **Android Studio**.
-   - Build the APK using **Build > Build Bundle(s) / APK(s) > Build APK(s)**.
-   - Alternatively, use Gradle:
+   - Open the project in `Android Studio`.
+   - Build the APK using `Build > Build Bundle(s) / APK(s) > Build APK(s)`.
+   - Alternatively, use `Gradle`:
 
-     ```bash
+     ```shell
      ./gradlew assembleDebug
      ```
 
-3. **Install the APK on Your Device**
+3. **Install the APK**
 
-   - Transfer the APK to your device.
-   - Install the APK using a file manager or via ADB:
-
-     ```bash
+   - Install the APK via `adb`:
+   
+     ```shell
      adb install app/build/outputs/apk/debug/app-debug.apk
      ```
 
 4. **Activate the Xposed Module**
 
-   - Open **Xposed Installer** or **LSPosed Manager**.
-   - Enable the **XposedFakeLocation** module.
-   - In LSPosed scope settings, select **Android System Framework (`android`)** and **Phone Services (`com.android.phone`)**.
+   - Open `LSPosed Manager`.
+   - Enable the `XposedFakeLocation` module.
+   - In `LSPosed` scope settings, select `Android System Framework ('android')` and `Phone Services ('com.android.phone')`.
    - Reboot your device to apply the scope change.
-   - Select target apps inside XposedFakeLocation instead of selecting each target app in LSPosed.
+   - Select target apps directly inside `XposedFakeLocation` instead of selecting each target app in LSPosed.
 
-   **Alternative (pre-v0.0.7 behavior):** If the in-app target selector does not work for you, open **Settings** inside XposedFakeLocation and turn **"Use built-in target app selection"** OFF. In that mode the in-app list is ignored and the `android` / `com.android.phone` system-wide hooks are skipped at boot. You then pick target apps directly in **LSPosed scope** (just like in v0.0.6) — add each target app to the module's scope there, remove `android` and `com.android.phone` if you no longer need them. Switching from the default ON to OFF takes effect at the next app launch (no reboot needed); switching from OFF back to ON requires a reboot, since the system-server / phone hooks can only be installed at boot.
+   **Alternative (pre-v0.0.7 behavior):** If the in-app target selector does not work for you, open `Settings` inside `XposedFakeLocation` and turn `"Use built-in target app selection"` OFF. In that mode the in-app list is ignored and the `android` / `com.android.phone` system-wide hooks are skipped at boot. You then pick target apps directly in the `LSPosed` manager app (just like in v0.0.6) — add each target app to the module's scope there, remove `android` and `com.android.phone` if you no longer need them. Reboot your device to apply the scope change.
 
 ---
 
@@ -99,140 +97,63 @@ You can always install the latest stable version from the releases page. If you 
 
 1. **Launch the App**
 
-   - Open **XposedFakeLocation** from your app drawer.
+   - Open `XposedFakeLocation` from your apps menu.
 
 2. **Navigate the Interface**
 
-   - Use the navigation drawer to access different sections:
+   - Use the navigation menu to access different sections:
      - **Map**: Primary interface for location selection
      - **Favorites**: Saved locations for quick access
+     - **Target Apps**: Apps that should receive spoofed locations.
+     - **Templates**: Concurrently spoof multiple apps with different locations and settings at the same time using templates.
      - **Settings**: Configure application behavior
-     - **Target Apps**: Apps that should receive spoofed locations
      - **About**: View application information
 
 3. **Select Target Apps**
 
-   - Open **Target Apps** from the navigation drawer.
+   - Open `Target Apps` from the navigation menu.
    - Search for and select the apps that should receive spoofed locations.
-   - Apps not selected here should keep receiving their normal location.
+   - Apps not selected here will keep receiving their normal location data.
 
 4. **Select a Location**
 
-   - Use the integrated map to select your desired location.
-   - Tap on the map to set the fake location.
+   - Use the integrated map to select your desired location by tapping on the map.
 
 5. **Configure Settings**
 
-   - Access the **Settings** screen to customize:
-
-     - **Accuracy**: Enable and set a custom horizontal and/or vertical accuracy value.
-     - **Altitude**: Enable and set a custom altitude.
-     - **Other Sensor Data**: New spoofable sensors data added in new versions.
-     - **Randomization Radius**: Set the radius in meters for location randomization.
+   - Optionally, access the `Settings` screen to fine-tune your spoofing settings.
 
 6. **Start Spoofing**
 
-   - Toggle the **Start** button to begin location spoofing.
-   - The app will override location data only for apps selected in **Target Apps**.
-   - Force stop and reopen the target app if it was already running.
+   - Toggle the `Play/Stop` button to begin location spoofing.
+   - `XposedFakeLocation` will override location data only for apps selected in `Target Apps`.
+   - If the target app was already running, it should be force stopped and reopened to apply the spoofing.
 
 7. **Stop Spoofing**
 
-   - Toggle the **Stop** button to cease location spoofing.
+   - Toggle the `Play/Stop` button to cease location spoofing.
 
 8. **Headless Mode (Optional, off by default)**
 
-   - You can drive XposedFakeLocation entirely from another app or from `adb shell` using broadcast intents — useful for automation or integrating with your own tools. No additional permissions or signing requirements on the caller side.
-   - **First enable it**: open **Settings → External Control → "Allow external broadcast control"**. Until you do, the receiver is disabled at the manifest level and no broadcast can reach it.
-   - ⚠️ **Security note:** when enabled, the broadcast receiver is exported with **no permission check**. Any app installed on the device and `adb shell` can flip play/stop and inject coordinates. Inputs are clamped to valid lat/lon/accuracy ranges, but caller identity is not verified — see [`docs/EXTERNAL_CONTROL.md`](docs/EXTERNAL_CONTROL.md) for how to lock it down further if you need that.
-
-     ```bash
-     # Play / ON: start spoofing using whatever location was last set
-     adb shell am broadcast \
-       -a com.noobexon.xposedfakelocation.action.START \
-       -n com.noobexon.xposedfakelocation/.manager.control.ControlReceiver
-
-     # Stop / OFF: stop spoofing
-     adb shell am broadcast \
-       -a com.noobexon.xposedfakelocation.action.STOP \
-       -n com.noobexon.xposedfakelocation/.manager.control.ControlReceiver
-
-     # Set the active fake location only (does NOT start spoofing) — example: Berlin
-     adb shell am broadcast \
-       -a com.noobexon.xposedfakelocation.action.SET_LOCATION \
-       -n com.noobexon.xposedfakelocation/.manager.control.ControlReceiver \
-       --ed latitude 52.5200 --ed longitude 13.4050
-
-     # Set location and immediately start spoofing — Berlin
-     adb shell am broadcast \
-       -a com.noobexon.xposedfakelocation.action.SET_LOCATION \
-       -n com.noobexon.xposedfakelocation/.manager.control.ControlReceiver \
-       --ed latitude 52.5200 --ed longitude 13.4050 --ez start true
-     ```
-
-   - Full action/extra reference and a Kotlin caller snippet: [`docs/EXTERNAL_CONTROL.md`](docs/EXTERNAL_CONTROL.md).
-
-### **Debugging which mode is active (Xposed log)**
-
-The module logs hook installation and mode via the standard Xposed log (`XposedBridge.log`), which LSPosed surfaces under the module's "Log" entry in its manager. You can also tail it from a shell:
-
-```bash
-adb shell tail -f /data/adb/lspd/log/modules.log | grep MainHook
-```
-
-Sample output:
-
-```
-[MainHook] Mode=IN_APP_TARGET_LIST | Installing system-server location hooks (android).
-[MainHook] Mode=IN_APP_TARGET_LIST | Installing in-process location hooks for com.example.app
-[MainHook] Mode=LSPOSED_SCOPE_ONLY | Skipping system-server hooks (android). Selection is driven solely by LSPosed scope.
-```
-
----
-
-### **Favorites**
-
-- Save frequently used locations for quick access.
-- If a marker is already present on the map, the coordinates for the new favorite location will automatically be copied to the fields from it.
-- Manage your favorites by adding or removing locations.
-- Access your favorites through the navigation drawer for easy selection.
+   - You can control `XposedFakeLocation` from another app or from `adb shell` using broadcast intents (useful for automation or integrating with your own tools). No additional permissions or signing requirements on the caller side are needed.
+   - See [`docs/EXTERNAL_CONTROL.md`](docs/EXTERNAL_CONTROL.md) for more details.
 
 ---
 
 ## **Development**
 
-### **Built With**
-
-- **Kotlin**: Programming language for Android development.
-- **Jetpack Compose**: Modern toolkit for building native Android UI with Material Design 3.
-- **Material 3 Design**: Latest design system from Google for an enhanced user experience.
-- **Xposed API**: Framework for runtime modification of system and app behavior.
-- **OSMDroid**: Open-source map rendering engine for Android.
-
-### **User Interface**
-
-- **Navigation Drawer**: Easy access to all major app features
-- **Material Design Components**: Consistent design language throughout the app
-- **Adaptive Layouts**: Compatible with various screen sizes and orientations
-
-### **Prerequisites**
-
-- **Android Studio Flamingo** or newer.
-- **Android SDK** with API level 31 or above.
-- **Kotlin** version 1.8.0 or above.
-
 ### **Building from Source**
 
 1. **Clone the Repository**
 
-   ```bash
+   ```shell
    git clone https://github.com/noobexon1/XposedFakeLocation.git
    ```
 
 2. **Open in Android Studio**
 
    - Navigate to the project directory.
-   - Open the project with **Android Studio**.
+   - Open the project with `Android Studio`.
 
 3. **Sync Gradle**
 
@@ -240,14 +161,14 @@ Sample output:
 
 4. **Build and Run**
 
-   - Connect your rooted device or start an emulator with root capabilities.
-   - Run the app from **Android Studio**.
+   - Connect your rooted device.
+   - Run the app from `Android Studio`.
 
 ---
 
 ## **License**
 
-Distributed under the **MIT License**. See [LICENSE](LICENSE) for more information.
+Distributed under the `MIT License`. See [LICENSE](LICENSE) for more information.
 
 ---
 
