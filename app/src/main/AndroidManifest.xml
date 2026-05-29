@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+        tools:ignore="PackageVisibilityPolicy,QueryAllPackagesPermission" />
 
     <application
         android:allowBackup="true"
@@ -34,14 +34,17 @@
         <meta-data
             android:name="xposedmodule"
             android:value="true"/>
+
         <!-- Introduction to the module (shown in the framework) -->
         <meta-data
             android:name="xposeddescription"
             android:value="XposedFakeLocation" />
+
         <!-- The minimum supported Api version of the module is usually 54. -->
         <meta-data
             android:name="xposedminversion"
             android:value="93"/>
+
         <!-- Module Scopes -->
         <meta-data
             android:name="xposedscope"
@@ -70,5 +73,4 @@
         </receiver>
 
     </application>
-
 </manifest>
