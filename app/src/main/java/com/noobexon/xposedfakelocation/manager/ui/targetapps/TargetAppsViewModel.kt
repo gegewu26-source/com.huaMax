@@ -25,13 +25,15 @@ data class TargetAppItem(
     val label: String,
     val packageName: String,
     val isSelected: Boolean = false,
-    val isPending: Boolean = false
+    val isPending: Boolean = false,
+    val isRelaunching: Boolean = false
 )
 
 data class TargetAppsUiState(
     val apps: List<TargetAppItem> = emptyList(),
     val selectedPackages: Set<String> = emptySet(),
     val pendingPackages: Set<String> = emptySet(),
+    val relaunchingPackages: Set<String> = emptySet(),
     val searchQuery: String = "",
     val isLoading: Boolean = true,
     val isModuleActive: Boolean = true
@@ -54,6 +56,9 @@ data class TargetAppsUiState(
 sealed interface TargetAppsEvent {
     data object ModuleNotActive : TargetAppsEvent
     data class ScopeRequestFailed(val message: String) : TargetAppsEvent
+    data class Relaunched(val appLabel: String) : TargetAppsEvent
+    data class RelaunchFailed(val appLabel: String) : TargetAppsEvent
+    data object RootRequired : TargetAppsEvent
 }
 
 /**
@@ -97,6 +102,59 @@ class TargetAppsViewModel(application: Application) : AndroidViewModel(applicati
         } else {
             addToScope(service, packageName)
         }
+    }
+
+    /**
+     * Force-stops the target app via root so the module reloads on next launch, then cold-starts
+     * it again. Requires the user to grant root (su); failures (e.g. denied prompt) are reported.
+     */
+    fun relaunchApp(packageName: String) {
+        if (_uiState.value.relaunchingPackages.contains(packageName)) return
+        val label = _uiState.value.apps.firstOrNull { it.packageName == packageName }?.label ?: packageName
+
+        setRelaunching(packageName, true)
+        viewModelScope.launch {
+            // Probing su both verifies root and triggers the manager's grant prompt if it was
+            // never requested before. A denied prompt / missing su binary returns false.
+            val hasRoot = withContext(Dispatchers.IO) { hasRootAccess() }
+            if (!hasRoot) {
+                setRelaunching(packageName, false)
+                _events.tryEmit(TargetAppsEvent.RootRequired)
+                return@launch
+            }
+
+            val killed = withContext(Dispatchers.IO) { runAsRoot("am force-stop $packageName") }
+            if (!killed) {
+                setRelaunching(packageName, false)
+                _events.tryEmit(TargetAppsEvent.RelaunchFailed(label))
+                return@launch
+            }
+
+            val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+                ?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            setRelaunching(packageName, false)
+            if (launchIntent != null) {
+                getApplication<Application>().startActivity(launchIntent)
+                _events.tryEmit(TargetAppsEvent.Relaunched(label))
+            } else {
+                _events.tryEmit(TargetAppsEvent.RelaunchFailed(label))
+            }
+        }
+    }
+
+    /** Verifies (and, on first use, requests) root by running `su -c id` and checking for uid=0. */
+    private fun hasRootAccess(): Boolean = try {
+        val process = Runtime.getRuntime().exec(arrayOf("su", "-c", "id"))
+        val output = process.inputStream.bufferedReader().use { it.readText() }
+        process.waitFor() == 0 && output.contains("uid=0")
+    } catch (e: Exception) {
+        false
+    }
+
+    private fun runAsRoot(command: String): Boolean = try {
+        Runtime.getRuntime().exec(arrayOf("su", "-c", command)).waitFor() == 0
+    } catch (e: Exception) {
+        false
     }
 
     private fun addToScope(service: XposedService, packageName: String) {
@@ -195,6 +253,20 @@ class TargetAppsViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    private fun setRelaunching(packageName: String, relaunching: Boolean) {
+        _uiState.update { state ->
+            val nextRelaunching = state.relaunchingPackages.toMutableSet().apply {
+                if (relaunching) add(packageName) else remove(packageName)
+            }
+            state.copy(
+                relaunchingPackages = nextRelaunching,
+                apps = state.apps.map {
+                    if (it.packageName == packageName) it.copy(isRelaunching = relaunching) else it
+                }
+            )
+        }
+    }
+
     private fun loadInstalledApps() {
         viewModelScope.launch {
             val installedApps = withContext(Dispatchers.IO) {
@@ -219,7 +291,8 @@ class TargetAppsViewModel(application: Application) : AndroidViewModel(applicati
                     apps = installedApps.map {
                         it.copy(
                             isSelected = state.selectedPackages.contains(it.packageName),
-                            isPending = state.pendingPackages.contains(it.packageName)
+                            isPending = state.pendingPackages.contains(it.packageName),
+                            isRelaunching = state.relaunchingPackages.contains(it.packageName)
                         )
                     },
                     isLoading = false

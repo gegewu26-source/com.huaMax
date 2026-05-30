@@ -136,6 +136,10 @@
     <string name="target_apps_selected_count">已选择 %1$d 个</string>
     <string name="target_apps_module_inactive">模块未激活。请在 Xposed 管理器中启用 XposedFakeLocation 以选择目标应用。</string>
     <string name="target_apps_scope_request_failed">无法更新作用域：%1$s</string>
+    <string name="target_apps_relaunch_cd">重新启动 %1$s</string>
+    <string name="target_apps_relaunching">正在重新启动 %1$s…</string>
+    <string name="target_apps_relaunch_failed">无法重新启动 %1$s。是否已授予 Root 权限？</string>
+    <string name="target_apps_root_required">重新启动目标应用需要 XposedFakeLocation 拥有 Root 权限。请在您的 Root 管理器中授予该权限。</string>
 
     <string name="permissions_activity_error">错误：无法访问 Activity。</string>
     <string name="permissions_required">使用此应用需要授予权限</string>

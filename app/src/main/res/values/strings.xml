@@ -136,6 +136,10 @@
     <string name="target_apps_selected_count">%1$d selected</string>
     <string name="target_apps_module_inactive">Module is not active. Enable XposedFakeLocation in your Xposed manager to choose target apps.</string>
     <string name="target_apps_scope_request_failed">Couldn\'t update scope: %1$s</string>
+    <string name="target_apps_relaunch_cd">Relaunch %1$s</string>
+    <string name="target_apps_relaunching">Relaunching %1$s…</string>
+    <string name="target_apps_relaunch_failed">Couldn\'t relaunch %1$s. Is root granted?</string>
+    <string name="target_apps_root_required">Relaunching a target app requires XposedFakeLocation to have root access. Please grant it in your root manager.</string>
 
     <string name="permissions_activity_error">Error: Unable to access activity.</string>
     <string name="permissions_required">Permissions are required to use this app</string>

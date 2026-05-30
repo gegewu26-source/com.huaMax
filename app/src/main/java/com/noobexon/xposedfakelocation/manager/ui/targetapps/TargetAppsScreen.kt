@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -69,13 +71,24 @@ fun TargetAppsScreen(
                     context.getString(R.string.target_apps_module_inactive)
                 is TargetAppsEvent.ScopeRequestFailed ->
                     context.getString(R.string.target_apps_scope_request_failed, event.message)
+                is TargetAppsEvent.Relaunched ->
+                    context.getString(R.string.target_apps_relaunching, event.appLabel)
+                is TargetAppsEvent.RelaunchFailed ->
+                    context.getString(R.string.target_apps_relaunch_failed, event.appLabel)
+                is TargetAppsEvent.RootRequired ->
+                    context.getString(R.string.target_apps_root_required)
             }
             snackbarHostState.showSnackbar(message)
         }
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.imePadding()
+            )
+        },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.screen_target_apps)) },
@@ -143,7 +156,8 @@ fun TargetAppsScreen(
                     items(uiState.filteredApps, key = { it.packageName }) { app ->
                         TargetAppRow(
                             app = app,
-                            onToggle = { viewModel.toggleApp(app.packageName) }
+                            onToggle = { viewModel.toggleApp(app.packageName) },
+                            onRelaunch = { viewModel.relaunchApp(app.packageName) }
                         )
                         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                     }
@@ -156,7 +170,8 @@ fun TargetAppsScreen(
 @Composable
 private fun TargetAppRow(
     app: TargetAppItem,
-    onToggle: () -> Unit
+    onToggle: () -> Unit,
+    onRelaunch: () -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -190,6 +205,23 @@ private fun TargetAppRow(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+            }
+
+            if (app.isSelected) {
+                if (app.isRelaunching) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    IconButton(onClick = onRelaunch) {
+                        Icon(
+                            Icons.Default.Refresh,
+                            contentDescription = stringResource(R.string.target_apps_relaunch_cd, app.label)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(4.dp))
             }
 
             if (app.isPending) {
