@@ -92,7 +92,7 @@ class ModuleEntry : XposedModule() {
             try {
                 val context = (chain.getArg(0) as Application).applicationContext
                 log(Log.INFO, TAG, "Target App's context has been acquired (${param.packageName}).")
-                if (PreferencesUtil.getHideFakeLocationToast() != false) {
+                if (PreferencesUtil.getHideFakeLocationToast() != true) {
                     Toast.makeText(context, "Fake Location Is Active!", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
