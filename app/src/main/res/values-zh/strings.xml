@@ -134,6 +134,8 @@
     <string name="favorites_empty">还没有添加收藏。</string>
     <string name="target_apps_search_label">搜索应用或包名</string>
     <string name="target_apps_selected_count">已选择 %1$d 个</string>
+    <string name="target_apps_module_inactive">模块未激活。请在 Xposed 管理器中启用 XposedFakeLocation 以选择目标应用。</string>
+    <string name="target_apps_scope_request_failed">无法更新作用域：%1$s</string>
 
     <string name="permissions_activity_error">错误：无法访问 Activity。</string>
     <string name="permissions_required">使用此应用需要授予权限</string>

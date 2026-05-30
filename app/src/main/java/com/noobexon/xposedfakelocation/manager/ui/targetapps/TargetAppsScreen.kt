@@ -27,11 +27,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -56,8 +59,23 @@ fun TargetAppsScreen(
     viewModel: TargetAppsViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            val message = when (event) {
+                is TargetAppsEvent.ModuleNotActive ->
+                    context.getString(R.string.target_apps_module_inactive)
+                is TargetAppsEvent.ScopeRequestFailed ->
+                    context.getString(R.string.target_apps_scope_request_failed, event.message)
+            }
+            snackbarHostState.showSnackbar(message)
+        }
+    }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.screen_target_apps)) },
@@ -101,6 +119,15 @@ fun TargetAppsScreen(
                 color = MaterialTheme.colorScheme.primary
             )
 
+            if (!uiState.isModuleActive) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.target_apps_module_inactive),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
 
             if (uiState.isLoading) {
@@ -134,7 +161,7 @@ private fun TargetAppRow(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onToggle)
+            .clickable(enabled = !app.isPending, onClick = onToggle)
     ) {
         Row(
             modifier = Modifier
@@ -165,10 +192,17 @@ private fun TargetAppRow(
                 )
             }
 
-            Checkbox(
-                checked = app.isSelected,
-                onCheckedChange = { onToggle() }
-            )
+            if (app.isPending) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Checkbox(
+                    checked = app.isSelected,
+                    onCheckedChange = { onToggle() }
+                )
+            }
         }
     }
 }

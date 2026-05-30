@@ -134,6 +134,8 @@
     <string name="favorites_empty">No favorites added.</string>
     <string name="target_apps_search_label">Search apps or package names</string>
     <string name="target_apps_selected_count">%1$d selected</string>
+    <string name="target_apps_module_inactive">Module is not active. Enable XposedFakeLocation in your Xposed manager to choose target apps.</string>
+    <string name="target_apps_scope_request_failed">Couldn\'t update scope: %1$s</string>
 
     <string name="permissions_activity_error">Error: Unable to access activity.</string>
     <string name="permissions_required">Permissions are required to use this app</string>
