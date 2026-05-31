@@ -5,6 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import com.noobexon.xposedfakelocation.data.REMOTE_PREFS_GROUP
 import com.noobexon.xposedfakelocation.xposed.hooks.LocationApiHooks
+import com.noobexon.xposedfakelocation.xposed.hooks.PhoneServicesHooks
+import com.noobexon.xposedfakelocation.xposed.hooks.SystemServicesHooks
 import com.noobexon.xposedfakelocation.xposed.utils.LocationUtil
 import com.noobexon.xposedfakelocation.xposed.utils.PreferencesUtil
 import io.github.libxposed.api.XposedModule
@@ -19,8 +21,8 @@ class ModuleEntry : XposedModule() {
     }
 
     private var locationApiHooks: LocationApiHooks? = null
-//    private var systemServicesHooks: SystemServicesHooks? = null
-//    private var phoneServicesHooks: PhoneServicesHooks? = null
+    private var systemServicesHooks: SystemServicesHooks? = null
+    private var phoneServicesHooks: PhoneServicesHooks? = null
 
     override fun onModuleLoaded(param: ModuleLoadedParam) {
         log(Log.INFO, TAG, "onModuleLoaded: ${param.processName}")
@@ -45,34 +47,6 @@ class ModuleEntry : XposedModule() {
 
         initHookingLogic(param)
 
-
-        // TODO: Integrate the commented code by splitting to cases of system or not system (after i integrate new xposed api)
-//        val useInAppTargetApps = PreferencesUtil.getUseInAppTargetApps()
-//        when (lpparam.packageName) {
-//            "android" -> {
-//                if (useInAppTargetApps) {
-//                    XposedBridge.log("$tag Mode=IN_APP_TARGET_LIST | Installing system-server location hooks (android).")
-//                    systemServicesHooks = SystemServicesHooks(lpparam).also { it.initHooks() }
-//                } else {
-//                    XposedBridge.log("$tag Mode=LSPOSED_SCOPE_ONLY | Skipping system-server hooks (android). Selection is driven solely by LSPosed scope.")
-//                }
-//                return
-//            }
-//            "com.android.phone" -> {
-//                if (useInAppTargetApps) {
-//                    XposedBridge.log("$tag Mode=IN_APP_TARGET_LIST | Installing phone-process location side-channel hooks (com.android.phone).")
-//                    phoneServicesHooks = PhoneServicesHooks(lpparam).also { it.initHooks() }
-//                } else {
-//                    XposedBridge.log("$tag Mode=LSPOSED_SCOPE_ONLY | Skipping phone-process hooks (com.android.phone).")
-//                }
-//                return
-//            }
-//            MANAGER_APP_PACKAGE_NAME -> return
-//            else -> {
-//                XposedBridge.log("$tag Mode=${if (useInAppTargetApps) "IN_APP_TARGET_LIST" else "LSPOSED_SCOPE_ONLY"} | Installing in-process location hooks for ${lpparam.packageName}")
-//                initHookingLogic(lpparam)
-//            }
-//        }
     }
 
     override fun onSystemServerStarting(param: SystemServerStartingParam) {

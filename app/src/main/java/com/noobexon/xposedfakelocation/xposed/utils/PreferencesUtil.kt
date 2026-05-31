@@ -4,6 +4,7 @@ package com.noobexon.xposedfakelocation.xposed.utils
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.noobexon.xposedfakelocation.data.*
 import com.noobexon.xposedfakelocation.data.model.LastClickedLocation
 
@@ -106,6 +107,20 @@ object PreferencesUtil {
 
     fun getHideFakeLocationToast(): Boolean? {
         return getPreference<Boolean>(KEY_HIDE_FAKE_LOCATION_TOAST)
+    }
+
+    // Mirrors the manager-side scope selection. Stored by PreferencesRepository as a JSON array
+    // of package names, so it must be parsed the same way here (not via the generic getPreference).
+    fun getTargetApps(): Set<String> {
+        val prefs = preferences ?: return emptySet()
+        val json = prefs.getString(KEY_TARGET_APPS, null) ?: return emptySet()
+        return try {
+            val type = object : TypeToken<List<String>>() {}.type
+            Gson().fromJson<List<String>?>(json, type)?.toSet() ?: emptySet()
+        } catch (e: Exception) {
+            log("Error parsing $KEY_TARGET_APPS JSON: ${e.message}", Log.ERROR)
+            emptySet()
+        }
     }
 
     private inline fun <reified T> getPreference(key: String): T? {

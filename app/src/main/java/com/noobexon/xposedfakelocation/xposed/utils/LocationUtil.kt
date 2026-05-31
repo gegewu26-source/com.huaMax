@@ -102,6 +102,13 @@ object LocationUtil {
         return fakeLocation
     }
 
+    // Name-based scope attribution for the system-level hooks: a package is spoofed only when it is
+    // one of the manager-selected target apps (mirrored into the remote `target_apps` preference).
+    fun shouldSpoofPackage(packageName: String?): Boolean {
+        if (packageName.isNullOrBlank()) return false
+        return PreferencesUtil.getTargetApps().contains(packageName)
+    }
+
     private fun attemptHideMockProvider(fakeLocation: Location) {
         try {
             HiddenApiBypass.invoke(fakeLocation.javaClass, fakeLocation, "setIsFromMockProvider", false)
