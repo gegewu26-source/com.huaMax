@@ -199,5 +199,12 @@ This application is intended for **development and testing purposes only**. Misu
 - [Line Awesome Icons](https://icons8.com/line-awesome) - Beautiful icon set used in the app.
 - [FuckLocation](https://github.com/Mikotwa/FuckLocation) - Reference for additional Android location hook handling.
 
-## **Stargazers over time**
-[![Stargazers over time](https://starchart.cc/noobexon1/XposedFakeLocation.svg?variant=adaptive)](https://starchart.cc/noobexon1/XposedFakeLocation)
+## **Star History**
+
+<a href="https://www.star-history.com/?repos=noobexon1%2FXposedFakeLocation&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=noobexon1/XposedFakeLocation&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=noobexon1/XposedFakeLocation&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=noobexon1/XposedFakeLocation&type=date&legend=top-left" />
+ </picture>
+</a>
