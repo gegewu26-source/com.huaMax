@@ -1,12 +1,12 @@
 # **XposedFakeLocation**
 
-![GitHub License](https://img.shields.io/github/license/noobexon1/XposedFakeLocation?color=blue)
-![GitHub Release Date](https://img.shields.io/github/release-date/noobexon1/XposedFakeLocation?color=violet)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/noobexon1/XposedFakeLocation/total)
-![GitHub repo size](https://img.shields.io/github/repo-size/noobexon1/XposedFakeLocation)
-![GitHub Repo stars](https://img.shields.io/github/stars/noobexon1/XposedFakeLocation)
-![GitHub Release](https://img.shields.io/github/v/release/noobexon1/XposedFakeLocation?color=red)
-[![Platform](https://img.shields.io/badge/platform-Android-green.svg)]()
+[![GitHub License](https://img.shields.io/github/license/noobexon1/XposedFakeLocation?style=for-the-badge&color=red&logo=googledocs&logoColor=red)](https://github.com/noobexon1/XposedFakeLocation/blob/master/LICENSE)
+[![GitHub Release Date](https://img.shields.io/github/release-date/noobexon1/XposedFakeLocation?style=for-the-badge&label=updated%20in&logo=clockify&logoColor=violet&color=violet)](https://github.com/noobexon1/XposedFakeLocation/releases/latest)
+[![GitHub Release](https://img.shields.io/github/v/release/noobexon1/XposedFakeLocation?style=for-the-badge&color=red)](https://github.com/noobexon1/XposedFakeLocation/releases/latest)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/noobexon1/XposedFakeLocation/total?style=for-the-badge&logo=rolldown&logoColor=blue&label=downloads%20(repo)&color=blue)](https://github.com/noobexon1/XposedFakeLocation/releases)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Xposed-Modules-Repo/com.noobexon.xposedfakelocation/total?style=for-the-badge&logo=rolldown&label=downloads%20(LSPosed)&logoColor=pink&color=pink)](https://github.com/Xposed-Modules-Repo/com.noobexon.xposedfakelocation/releases)
+[![GitHub Repo stars](https://img.shields.io/github/stars/noobexon1/XposedFakeLocation?style=for-the-badge&logo=apachespark&color=yellow)](https://github.com/noobexon1/XposedFakeLocation/stargazers)
+![Platform](https://img.shields.io/badge/platform-Android-green.svg?style=for-the-badge&logo=android)
 
 **XposedFakeLocation** is an Android application and Xposed module that allows you to spoof your device's location for specific apps — and, optionally, at the system level — without using "mock location" from the developer options. Customize your location with precision, including sensor data, and add randomization within a specified radius for enhanced privacy.
 
