@@ -1,14 +1,14 @@
 package com.huaMax.data.update
 
 import com.huaMax.BuildConfig
-import com.huaMax.data.GITHUB_LATEST_RELEASE_API_URL
+import com.huaMax.data.GITHUB_LATEST_APK_URL
 import com.huaMax.data.GITHUB_LATEST_RELEASE_URL
+import com.huaMax.data.GITHUB_REPOSITORY_URL
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 
 object UpdateManager {
     private const val CONNECT_TIMEOUT_MS = 8_000
@@ -72,32 +72,42 @@ object UpdateManager {
     }
 
     private fun fetchLatestRelease(): LatestRelease {
-        val connection = (URI.create(GITHUB_LATEST_RELEASE_API_URL).toURL().openConnection() as HttpURLConnection).apply {
-            requestMethod = "GET"
+        val connection = (URI.create(GITHUB_LATEST_APK_URL).toURL().openConnection() as HttpURLConnection).apply {
+            requestMethod = "HEAD"
             connectTimeout = CONNECT_TIMEOUT_MS
             readTimeout = READ_TIMEOUT_MS
             useCaches = false
-            setRequestProperty("Accept", "application/vnd.github+json")
+            instanceFollowRedirects = false
             setRequestProperty("User-Agent", "LocationMax/${BuildConfig.VERSION_NAME}")
         }
 
         return try {
             val responseCode = connection.responseCode
-            if (responseCode !in 200..299) {
-                throw IOException("GitHub HTTP $responseCode")
+            if (responseCode !in 300..399) {
+                throw IOException("GitHub redirect HTTP $responseCode")
             }
 
-            val body = connection.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
-            parseLatestRelease(body)
+            val location = connection.getHeaderField("Location").orEmpty()
+            parseLatestReleaseLocation(location)
         } finally {
             connection.disconnect()
         }
     }
 
-    private fun parseLatestRelease(body: String): LatestRelease {
-        val json = JSONObject(body)
-        val tag = json.optString("tag_name", "")
-        val releaseUrl = json.optString("html_url", GITHUB_LATEST_RELEASE_URL).ifBlank { GITHUB_LATEST_RELEASE_URL }
+    private fun parseLatestReleaseLocation(location: String): LatestRelease {
+        if (location.isBlank()) {
+            throw IllegalArgumentException("Missing latest release redirect")
+        }
+
+        val path = URI.create(location).path
+        val tag = path
+            .substringAfter("/releases/download/", "")
+            .substringBefore("/")
+        val releaseUrl = if (tag.isBlank()) {
+            GITHUB_LATEST_RELEASE_URL
+        } else {
+            "$GITHUB_REPOSITORY_URL/releases/tag/$tag"
+        }
         val versionName = versionNameFromTag(tag)
         val versionCode = versionCodeFromTag(tag, versionName)
 

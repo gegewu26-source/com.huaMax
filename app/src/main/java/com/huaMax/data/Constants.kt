@@ -63,7 +63,7 @@ const val REMOTE_CONTROL_URL = "http://8.134.217.44/locationmax/control.json"
 const val GITHUB_REPOSITORY_URL = "https://github.com/gegewu26-source/com.huaMax"
 const val GITHUB_RELEASES_URL = "$GITHUB_REPOSITORY_URL/releases"
 const val GITHUB_LATEST_RELEASE_URL = "$GITHUB_RELEASES_URL/latest"
-const val GITHUB_LATEST_RELEASE_API_URL = "https://api.github.com/repos/gegewu26-source/com.huaMax/releases/latest"
+const val GITHUB_LATEST_APK_URL = "$GITHUB_LATEST_RELEASE_URL/download/LocationMax-release.apk"
 
 // Packages added/removed from module scope when system-level hooks are toggled.
 val SYSTEM_HOOK_PACKAGES = listOf("android", "com.android.phone")
