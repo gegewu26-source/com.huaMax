@@ -6,6 +6,18 @@ LocationMax is an Android Xposed/LSPosed module for location simulation in autho
 
 The module can make selected apps receive a configured virtual location. It is intended for app testing, device debugging, QA verification, and other lawful scenarios where the device owner has permission to perform location simulation.
 
+## Downloads
+
+Latest APK for force updates:
+
+- [LocationMax-release.apk](https://raw.githubusercontent.com/gegewu26-source/com.huaMax/main/releases/LocationMax-release.apk)
+
+Version history:
+
+| Version | APK |
+| --- | --- |
+| 0.0.15 | [LocationMax-release-0.0.15.apk](https://raw.githubusercontent.com/gegewu26-source/com.huaMax/main/releases/LocationMax-release-0.0.15.apk) |
+
 ## Features
 
 - Pick a virtual location on the map.

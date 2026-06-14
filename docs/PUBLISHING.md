@@ -69,6 +69,18 @@ Upload this APK as a release asset:
 LocationMax-release.apk
 ```
 
+Also keep a versioned copy in the repository:
+
+```text
+releases/LocationMax-release-0.0.15.apk
+```
+
+Publishing rule:
+
+- `releases/LocationMax-release.apk` is the latest APK and may be overwritten for force updates.
+- `releases/LocationMax-release-X.Y.Z.apk` is a permanent rollback copy and must not be overwritten or deleted.
+- Add each new version to the top of the download tables in `README.md` and `releases/README.md`.
+
 The release title can be:
 
 ```text
